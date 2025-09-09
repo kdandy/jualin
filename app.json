@@ -1,0 +1,64 @@
+{
+  "name": "KKN Laravel App",
+  "description": "Laravel application for KKN project",
+  "repository": "https://github.com/KKN-BankSampah/kkn",
+  "logo": "https://laravel.com/img/logomark.min.svg",
+  "keywords": ["laravel", "php", "framework"],
+  "env": {
+    "APP_ENV": {
+      "description": "Application environment",
+      "value": "production"
+    },
+    "APP_DEBUG": {
+      "description": "Application debug mode",
+      "value": "false"
+    },
+    "APP_URL": {
+      "description": "Application URL",
+      "value": "http://independent-rosamund-mahkamah-agung-dd226431.koyeb.app"
+    },
+    "LOG_CHANNEL": {
+      "description": "Log channel",
+      "value": "stderr"
+    },
+    "DB_CONNECTION": {
+      "description": "Database connection",
+      "value": "pgsql"
+    },
+    "CACHE_DRIVER": {
+      "description": "Cache driver",
+      "value": "file"
+    },
+    "SESSION_DRIVER": {
+      "description": "Session driver",
+      "value": "file"
+    },
+    "SESSION_LIFETIME": {
+      "description": "Session lifetime",
+      "value": "120"
+    },
+    "QUEUE_CONNECTION": {
+      "description": "Queue connection",
+      "value": "sync"
+    },
+    "FORCE_HTTPS": {
+      "description": "Force HTTPS redirect",
+      "value": "false"
+    },
+    "SESSION_SECURE_COOKIE": {
+      "description": "Secure session cookies",
+      "value": "false"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/php"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+} 

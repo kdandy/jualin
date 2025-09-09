@@ -1,0 +1,143 @@
+/**
+ *
+ * You can write your CSS code here, DO NOT touch the default JavaScript file
+ * because it will make it harder for you to update.
+ * 
+ */
+
+/* Sidebar Menu Spacing Improvements */
+.main-sidebar .sidebar-menu {
+    padding: 10px 0;
+}
+
+.main-sidebar .sidebar-menu li {
+    margin-bottom: 2px;
+}
+
+.main-sidebar .sidebar-menu li.menu-header {
+    margin-top: 20px;
+    margin-bottom: 8px;
+    padding: 8px 25px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.main-sidebar .sidebar-menu li.menu-header:first-child {
+    margin-top: 10px;
+}
+
+.main-sidebar .sidebar-menu li a {
+    padding: 12px 25px;
+    margin: 0 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.main-sidebar .sidebar-menu li.dropdown ul.dropdown-menu {
+    padding: 5px 0;
+    margin: 0;
+}
+
+.main-sidebar .sidebar-menu li.dropdown ul.dropdown-menu li {
+    margin-bottom: 1px;
+}
+
+.main-sidebar .sidebar-menu li.dropdown ul.dropdown-menu li a {
+    padding: 8px 25px 8px 50px;
+    margin: 0 10px;
+    font-size: 13px;
+}
+
+/* Hover effects */
+.main-sidebar .sidebar-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(2px);
+}
+
+.main-sidebar .sidebar-menu li.active > a {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive Dashboard Navigation */
+@media (max-width: 991.98px) {
+    .section-header {
+        padding: 15px !important;
+    }
+    
+    .section-header h1 {
+        font-size: 1.5rem !important;
+    }
+    
+    #dashboardNav {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    #dashboardNav .navbar-nav {
+        width: 100%;
+    }
+    
+    #dashboardNav .nav-link {
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        background-color: #f8f9fa;
+        color: #495057;
+        text-decoration: none;
+        display: block;
+        width: 100%;
+    }
+    
+    #dashboardNav .nav-link:hover {
+        background-color: #e9ecef;
+        color: #495057;
+    }
+    
+    #dashboardNav .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        box-shadow: none;
+        border: none;
+        background-color: #e9ecef;
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+    
+    #dashboardNav .dropdown-item {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .section-header {
+        padding: 10px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .section-header h1 {
+        font-size: 1.25rem !important;
+    }
+    
+    .btn-outline-primary {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+/* Header Text Color Customization */
+.main-navbar .nav-link-lg {
+    color: #000 !important;
+}
+
+.main-navbar .nav-link-user .d-sm-none.d-lg-inline-block {
+    color: #000 !important;
+}
+
+.main-navbar .nav-link-lg:hover {
+    color: #333 !important;
+}
+
+/*# sourceMappingURL=custom.css.map */

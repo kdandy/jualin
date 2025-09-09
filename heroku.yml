@@ -1,0 +1,19 @@
+build:
+  docker:
+    web: vendor/bin/heroku-php-apache2 public/
+
+env:
+  APP_ENV: production
+  APP_DEBUG: false
+  APP_URL: http://independent-rosamund-mahkamah-agung-dd226431.koyeb.app
+  LOG_CHANNEL: stderr
+  DB_CONNECTION: pgsql
+  CACHE_DRIVER: file
+  SESSION_DRIVER: file
+  SESSION_LIFETIME: 120
+  QUEUE_CONNECTION: sync
+
+formation:
+  web:
+    quantity: 1
+    size: basic 
