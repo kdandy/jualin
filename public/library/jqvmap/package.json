@@ -22,14 +22,14 @@
     "url": "https://github.com/manifestinteractive/jqvmap.git"
   },
   "dependencies": {
-    "jquery": "~1.11.3"
+    "jquery": "~3.7.1"
   },
   "scripts": {
     "test": "grunt test"
   },
   "devDependencies": {
     "eslint": "^0.21.0",
-    "grunt": "^0.4.5",
+    "grunt": "^1.6.1",
     "grunt-bump": "0.0.15",
     "grunt-changelog": "^0.2.2",
     "grunt-contrib-clean": "^0.6.0",
