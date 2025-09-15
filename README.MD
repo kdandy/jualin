@@ -1,111 +1,36 @@
-# laravel 12 with Stisla Template
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Welcome to the repository for laravel 12 integrated with Stisla Bootstrap 5 template!
+## Getting Started
 
-## Overview
-This repository contains a laravel 12 template that comes pre-configured with authentication from Breeze and utilizes the Stisla Bootstrap 5 template for the UI. It includes various features to help you quickly set up a robust web application.
+First, run the development server:
 
-## Features
-- laravel 12
-- Stisla Bootstrap 5 Template
-- Authentication with Laravel Breeze
-- User Profile Management
-- Responsive Design
-- Pre-configured Dashboard
-- Example Pages (Register, Login, Dashboard, Blank Page, Edit User Profile)
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## Installation Guide
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Prerequisites
-- PHP >= 8.2
-- Composer
-- Node.js
-- npm
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-### Installation Steps
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/vickymaulana/laravel11-stisla.git
-    ```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-2. Navigate into the project directory:
-    ```bash
-    cd laravel11-stisla
-    ```
+## Learn More
 
-3. Install PHP dependencies:
-    ```bash
-    composer install
-    ```
+To learn more about Next.js, take a look at the following resources:
 
-4. Install JavaScript dependencies:
-    ```bash
-    npm install && npm run dev
-    ```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-5. Copy the `.env.example` file and rename it to `.env`:
-    ```bash
-    cp .env.example .env
-    ```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-6. Generate application key:
-    ```bash
-    php artisan key:generate
-    ```
+## Deploy on Vercel
 
-7. Run database migrations:
-    ```bash
-    php artisan migrate
-    ```
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-8. Start the development server:
-    ```bash
-    php artisan serve
-    ```
-
-### User Access
-To access the system, users must log in with existing credentials. New user accounts can only be created by administrators through the system's user management interface.
-
-## Contributors
-- **Vicky Maulana** - [GitHub](https://github.com/vickymaulana)
-
-### Special Thanks
-I extend my gratitude to all the interns at LLDIKTI 2 Division of Information System Development for their contributions and support.
-
-- [Ahmad Dimas Aldian Al-furqon](https://github.com/anqois)
-- [Abdillah Khalid](https://github.com/KhalidUnsri)
-- [Haikal Tirta Albanna](https://github.com/HaikalAlbanna)
-- [Meta Berliana](https://github.com/Metabrln)
-- [Imelda Triadmajaya](https://github.com/imeldatriajaya)
-- [Hilwa Izzatinnafisah](https://github.com/ksnwaa)
-- [Triyana Sugiyarti](https://github.com/TriyanaSgi)
-- [Adelia Isni Hendrawan Putri](https://github.com/lilisky07)
-- [Siti Nur Azizah](https://github.com/sukasukajija)
-- [M. Husaini Hasyim](https://github.com/son-alone)
-- [Andre Satriawan](https://github.com/andresa11satriawan)
-- [Lathifah Putri Aresti](https://github.com/lathifahputri)
-- [Sisca Amelia](https://github.com/siscaamelia)
-- [M. Denny Tri Lisandi](https://github.com/Koutsura)
-
-Feel free to explore their repositories as well.
-
----
-
-If you encounter any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request. Thank you for your interest and support!
-
-## Screenshots
-
-### Register Page
-![Register Page](img/register.png "Register Page")
-
-### Login Page
-![Login Page](img/login.png "Login Page")
-
-### Dashboard Page
-![Dashboard Page](img/dashboard.png "Dashboard Page")
-
-### Blank Page
-![Blank Page](img/blank.png "Blank Page")
-
-### Edit User Profile Page
-![Edit User Profile Page](img/edit.png "Edit User Profile Page")
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
