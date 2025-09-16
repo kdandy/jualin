@@ -1,5 +1,5 @@
 {
-  "name": "shopcartyt",
+  "name": "jualin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -54,5 +54,10 @@
     "eslint-config-next": "15.2.1",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "trustedDependencies": [
+    "@clerk/shared",
+    "@tailwindcss/oxide",
+    "unrs-resolver"
+  ]
 }
