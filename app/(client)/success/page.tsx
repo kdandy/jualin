@@ -11,6 +11,7 @@ const SuccessPageContent = () => {
   const { resetCart } = useStore();
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
+  const transactionId = searchParams.get("transaction_id");
 
   useEffect(() => {
     if (orderNumber) {
@@ -47,6 +48,12 @@ const SuccessPageContent = () => {
             Order Number:{" "}
             <span className="text-black font-semibold">{orderNumber}</span>
           </p>
+          {transactionId && (
+            <p className="text-gray-700">
+              Transaction ID:{" "}
+              <span className="text-black font-semibold">{transactionId}</span>
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Link

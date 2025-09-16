@@ -25,7 +25,7 @@ const SideMenu: FC<SidebarProps> = ({ isOpen, onClose }) => {
         className="min-w-72 max-w-96 bg-black h-screen p-10 border-r border-r-shop_light_green flex flex-col gap-6"
       >
         <div className="flex items-center justify-between gap-5">
-          <Logo className="text-white" spanDesign="group-hover:text-white" />
+          <Logo className="brightness-0 invert" />
           <button
             onClick={onClose}
             className="hover:text-shop_light_green hoverEffect"

@@ -1,171 +1,111 @@
-import { Metadata } from "@/actions/createCheckoutSession";
-import stripe from "@/lib/stripe";
 import { backendClient } from "@/sanity/lib/backendClient";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import crypto from "crypto";
+
+// Midtrans notification interface
+interface MidtransNotification {
+  transaction_time: string;
+  transaction_status: string;
+  transaction_id: string;
+  status_message: string;
+  status_code: string;
+  signature_key: string;
+  payment_type: string;
+  order_id: string;
+  merchant_id: string;
+  gross_amount: string;
+  fraud_status: string;
+  currency: string;
+  custom_field1?: string; // orderNumber
+  custom_field2?: string; // customerName
+  custom_field3?: string; // customerEmail
+  custom_expiry?: string;
+}
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
-  const headersList = await headers();
-  const sig = headersList.get("stripe-signature");
-
-  if (!sig) {
-    return NextResponse.json(
-      { error: "No Signature found for stripe" },
-      { status: 400 }
-    );
-  }
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!webhookSecret) {
-    console.log("Stripe webhook secret is not set");
-    return NextResponse.json(
-      {
-        error: "Stripe webhook secret is not set",
-      },
-      { status: 400 }
-    );
-  }
-  let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-  } catch (error) {
-    console.error("Webhook signature verification failed:", error);
-    return NextResponse.json(
-      {
-        error: `Webhook Error: ${error}`,
-      },
-      { status: 400 }
-    );
-  }
-
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const invoice = session.invoice
-      ? await stripe.invoices.retrieve(session.invoice as string)
-      : null;
-
-    try {
-      await createOrderInSanity(session, invoice);
-    } catch (error) {
-      console.error("Error creating order in sanity:", error);
+    const body = await req.text();
+    const notification: MidtransNotification = JSON.parse(body);
+    
+    // Verify signature
+    const serverKey = process.env.MIDTRANS_SERVER_KEY;
+    if (!serverKey) {
+      console.log("Midtrans server key is not set");
       return NextResponse.json(
-        {
-          error: `Error creating order: ${error}`,
-        },
+        { error: "Midtrans server key is not set" },
         { status: 400 }
       );
     }
+
+    const signatureKey = crypto
+      .createHash("sha512")
+      .update(
+        `${notification.order_id}${notification.status_code}${notification.gross_amount}${serverKey}`
+      )
+      .digest("hex");
+
+    if (signatureKey !== notification.signature_key) {
+      console.error("Invalid signature");
+      return NextResponse.json(
+        { error: "Invalid signature" },
+        { status: 400 }
+      );
+    }
+
+    // Handle successful payment
+    if (notification.transaction_status === "capture" || 
+        notification.transaction_status === "settlement") {
+      
+      try {
+        await createOrderInSanity(notification);
+        console.log(`Order created for transaction: ${notification.transaction_id}`);
+      } catch (error) {
+        console.error("Error creating order in Sanity:", error);
+        return NextResponse.json(
+          { error: `Error creating order: ${error}` },
+          { status: 500 }
+        );
+      }
+    } else if (notification.transaction_status === "pending") {
+      console.log(`Payment pending for transaction: ${notification.transaction_id}`);
+    } else if (notification.transaction_status === "deny" || 
+               notification.transaction_status === "cancel" || 
+               notification.transaction_status === "expire") {
+      console.log(`Payment failed/cancelled for transaction: ${notification.transaction_id}`);
+    }
+
+    return NextResponse.json({ status: "ok" });
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return NextResponse.json(
+      { error: "Webhook processing failed" },
+      { status: 500 }
+    );
   }
-  return NextResponse.json({ received: true });
 }
 
-async function createOrderInSanity(
-  session: Stripe.Checkout.Session,
-  invoice: Stripe.Invoice | null
-) {
-  const {
-    id,
-    amount_total,
-    currency,
-    metadata,
-    payment_intent,
-    total_details,
-  } = session;
-  const { orderNumber, customerName, customerEmail, clerkUserId, address } =
-    metadata as unknown as Metadata & { address: string };
-  const parsedAddress = address ? JSON.parse(address) : null;
-
-  const lineItemsWithProduct = await stripe.checkout.sessions.listLineItems(
-    id,
-    { expand: ["data.price.product"] }
-  );
-
-  // Create Sanity product references and prepare stock updates
-  const sanityProducts = [];
-  const stockUpdates = [];
-  for (const item of lineItemsWithProduct.data) {
-    const productId = (item.price?.product as Stripe.Product)?.metadata?.id;
-    const quantity = item?.quantity || 0;
-
-    if (!productId) continue;
-
-    sanityProducts.push({
-      _key: crypto.randomUUID(),
-      product: {
-        _type: "reference",
-        _ref: productId,
-      },
-      quantity,
-    });
-    stockUpdates.push({ productId, quantity });
-  }
-  //   Create order in Sanity
-
+async function createOrderInSanity(notification: MidtransNotification) {
+  // Extract metadata from order_id (assuming format: orderNumber_timestamp)
+  const orderNumber = notification.order_id.split('_')[0];
+  
+  // For now, we'll create a basic order. In a real implementation,
+  // you might want to store additional metadata in a temporary storage
+  // or include it in the order_id format
   const order = await backendClient.create({
     _type: "order",
-    orderNumber,
-    stripeCheckoutSessionId: id,
-    stripePaymentIntentId: payment_intent,
-    customerName,
-    stripeCustomerId: customerEmail,
-    clerkUserId: clerkUserId,
-    email: customerEmail,
-    currency,
-    amountDiscount: total_details?.amount_discount
-      ? total_details.amount_discount / 100
-      : 0,
-
-    products: sanityProducts,
-    totalPrice: amount_total ? amount_total / 100 : 0,
+    orderNumber: orderNumber,
+    midtransTransactionId: notification.transaction_id,
+    midtransOrderId: notification.order_id,
+    customerName: "Customer", // This should come from your metadata storage
+    email: "customer@example.com", // This should come from your metadata storage
+    currency: notification.currency.toUpperCase(),
+    totalPrice: parseFloat(notification.gross_amount),
     status: "paid",
-    orderDate: new Date().toISOString(),
-    invoice: invoice
-      ? {
-          id: invoice.id,
-          number: invoice.number,
-          hosted_invoice_url: invoice.hosted_invoice_url,
-        }
-      : null,
-    address: parsedAddress
-      ? {
-          state: parsedAddress.state,
-          zip: parsedAddress.zip,
-          city: parsedAddress.city,
-          address: parsedAddress.address,
-          name: parsedAddress.name,
-        }
-      : null,
+    orderDate: notification.transaction_time,
+    paymentType: notification.payment_type,
+    fraudStatus: notification.fraud_status,
   });
 
-  // Update stock levels in Sanity
-
-  await updateStockLevels(stockUpdates);
+  console.log("Order created in Sanity:", order._id);
   return order;
-}
-
-// Function to update stock levels
-async function updateStockLevels(
-  stockUpdates: { productId: string; quantity: number }[]
-) {
-  for (const { productId, quantity } of stockUpdates) {
-    try {
-      // Fetch current stock
-      const product = await backendClient.getDocument(productId);
-
-      if (!product || typeof product.stock !== "number") {
-        console.warn(
-          `Product with ID ${productId} not found or stock is invalid.`
-        );
-        continue;
-      }
-
-      const newStock = Math.max(product.stock - quantity, 0); // Ensure stock does not go negative
-
-      // Update stock in Sanity
-      await backendClient.patch(productId).set({ stock: newStock }).commit();
-    } catch (error) {
-      console.error(`Failed to update stock for product ${productId}:`, error);
-    }
-  }
 }

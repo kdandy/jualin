@@ -109,7 +109,7 @@ export const productType = defineType({
       const image = media && media[0];
       return {
         title: title,
-        subtitle: `$${subtitle}`,
+        subtitle: `Rp ${subtitle?.toLocaleString('id-ID')}`,
         media: image,
       };
     },

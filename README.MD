@@ -1,36 +1,312 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 Jualin Marketplace
 
-## Getting Started
+Jualin adalah platform e-commerce modern yang dibangun dengan Next.js 15, TypeScript, dan Sanity CMS. Platform ini menyediakan fitur lengkap untuk marketplace online dengan integrasi pembayaran Midtrans.
 
-First, run the development server:
+## 🚀 Fitur Utama
+
+- **🛍️ E-commerce Lengkap**: Katalog produk, keranjang belanja, wishlist
+- **💳 Payment Gateway**: Integrasi Midtrans untuk pembayaran
+- **👤 User Management**: Autentikasi dengan Clerk
+- **📱 Responsive Design**: UI modern dengan Tailwind CSS
+- **🎨 Admin Dashboard**: Panel admin untuk mengelola produk, order, dan konten
+- **📝 Blog System**: Sistem blog terintegrasi
+- **🏷️ Brand & Category**: Manajemen brand dan kategori produk
+- **📍 Address Management**: Sistem alamat pengiriman
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, Sanity CMS
+- **Database**: Sanity (Headless CMS)
+- **Authentication**: Clerk
+- **Payment**: Midtrans
+- **UI Components**: Radix UI, Lucide Icons
+- **Package Manager**: Bun
+
+## 📋 Prerequisites
+
+Pastikan Anda telah menginstall:
+
+- **Node.js** (v18 atau lebih baru)
+- **Bun** (Package manager)
+- **Git**
+
+### Install Bun
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+# macOS/Linux
+curl -fsSL https://bun.sh/install | bash
+
+# Windows (PowerShell)
+powershell -c "irm bun.sh/install.ps1 | iex"
+
+# Atau via npm
+npm install -g bun
+```
+
+## 🚀 Instalasi & Setup
+
+### 1. Clone Repository
+
+```bash
+git clone <repository-url>
+cd jualin
+```
+
+### 2. Install Dependencies
+
+```bash
+bun install
+```
+
+### 3. Environment Variables
+
+Buat file `.env.local` di root directory dan isi dengan konfigurasi berikut:
+
+```env
+# APPLICATION CONFIGURATION
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+
+# SANITY CMS CONFIGURATION
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_sanity_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
+SANITY_API_READ_TOKEN=your_sanity_read_token
+SANITY_API_WRITE_TOKEN=your_sanity_write_token
+
+# CLERK AUTHENTICATION
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+# MIDTRANS PAYMENT GATEWAY
+MIDTRANS_SERVER_KEY=your_midtrans_server_key
+NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=your_midtrans_client_key
+MIDTRANS_IS_PRODUCTION=false
+```
+
+### 4. Setup Sanity CMS
+
+#### 4.1 Install Sanity CLI
+
+```bash
+bun add -g @sanity/cli
+```
+
+#### 4.2 Login ke Sanity
+
+```bash
+sanity login
+```
+
+#### 4.3 Inisialisasi Sanity Project
+
+```bash
+sanity init
+```
+
+#### 4.4 Deploy Sanity Schema
+
+```bash
+sanity deploy
+```
+
+### 5. Setup Clerk Authentication
+
+1. Buat akun di [Clerk.com](https://clerk.com)
+2. Buat aplikasi baru
+3. Copy API keys ke `.env.local`
+4. Konfigurasi redirect URLs:
+   - Sign-in URL: `http://localhost:3000/sign-in`
+   - Sign-up URL: `http://localhost:3000/sign-up`
+   - After sign-in: `http://localhost:3000`
+   - After sign-up: `http://localhost:3000`
+
+### 6. Setup Midtrans Payment
+
+1. Daftar di [Midtrans](https://midtrans.com)
+2. Dapatkan Server Key dan Client Key dari dashboard
+3. Konfigurasi di `.env.local`
+4. Setup Webhook URLs di Midtrans Dashboard:
+   - **Notification URL**: `http://localhost:3000/api/midtrans/notification`
+   - **Finish Redirect URL**: `http://localhost:3000/api/midtrans/finish`
+   - **Error Redirect URL**: `http://localhost:3000/cart?error=payment_failed`
+   - **Pending Redirect URL**: `http://localhost:3000/cart?status=pending`
+
+## 🏃‍♂️ Menjalankan Aplikasi
+
+### Development Mode
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikasi akan berjalan di `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Build aplikasi
+bun run build
 
-## Learn More
+# Jalankan production server
+bun start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 👨‍💼 Login Admin
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Akses Admin Dashboard
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Buka browser dan navigasi ke: `http://localhost:3000/admin/login`
 
-## Deploy on Vercel
+2. Gunakan kredensial admin berikut:
+   - **Email**: `admin@jualin.com`
+   - **Password**: `Jualinyuk2025#`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Setelah login berhasil, Anda akan diarahkan ke dashboard admin di: `http://localhost:3000/admin/dashboard`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Fitur Admin Dashboard
+
+- **📊 Dashboard**: Overview statistik dan analytics
+- **🛍️ Products**: Manajemen produk (tambah, edit, hapus)
+- **📦 Orders**: Kelola pesanan dan status pembayaran
+- **🏷️ Categories**: Manajemen kategori produk
+- **🏢 Brands**: Manajemen brand/merek
+- **📝 Blogs**: Sistem manajemen konten blog
+- **👥 Authors**: Manajemen penulis blog
+- **📍 Addresses**: Manajemen alamat pengiriman
+- **⚙️ Settings**: Konfigurasi sistem
+
+## 📁 Struktur Project
+
+```
+jualin/
+├── app/
+│   ├── (client)/           # Client-side pages
+│   │   ├── api/           # API routes
+│   │   ├── cart/          # Shopping cart
+│   │   ├── product/       # Product pages
+│   │   ├── success/       # Payment success
+│   │   └── ...
+│   ├── admin/             # Admin dashboard
+│   │   ├── dashboard/     # Admin dashboard
+│   │   ├── products/      # Product management
+│   │   ├── orders/        # Order management
+│   │   └── ...
+│   └── api/               # Global API routes
+├── components/            # Reusable components
+├── actions/              # Server actions
+├── lib/                  # Utility libraries
+├── sanity/               # Sanity CMS configuration
+├── store.ts              # Zustand store
+└── ...
+```
+
+## 🔧 Konfigurasi Tambahan
+
+### Sanity Studio
+
+Akses Sanity Studio untuk mengelola konten:
+
+```bash
+# Jalankan Sanity Studio
+bun run sanity dev
+```
+
+Studio akan tersedia di `http://localhost:3000/studio`
+
+### Database Seeding
+
+Jika Anda memiliki data seed:
+
+```bash
+# Import data ke Sanity
+sanity dataset import seed/data.ndjson production
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push code ke GitHub
+2. Connect repository di Vercel
+3. Set environment variables di Vercel dashboard
+4. Deploy
+
+### Environment Variables untuk Production
+
+Pastikan semua environment variables sudah diset dengan nilai production:
+
+- Update `NEXT_PUBLIC_BASE_URL` dengan domain production
+- Set `MIDTRANS_IS_PRODUCTION=true` untuk production
+- Update Midtrans webhook URLs dengan domain production
+
+## 🔍 Testing
+
+### Test Payment Flow
+
+1. Tambahkan produk ke keranjang
+2. Checkout dengan alamat pengiriman
+3. Test pembayaran dengan kartu test Midtrans:
+   - **Card Number**: `4811 1111 1111 1114`
+   - **CVV**: `123`
+   - **Exp Date**: `01/25`
+
+### Test Admin Functions
+
+1. Login ke admin dashboard
+2. Test CRUD operations untuk produk
+3. Verifikasi order management
+4. Test blog management
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Sanity Connection Error**
+   - Pastikan project ID dan tokens benar
+   - Cek network connection
+
+2. **Clerk Authentication Error**
+   - Verifikasi API keys
+   - Cek redirect URLs configuration
+
+3. **Midtrans Payment Error**
+   - Pastikan server key dan client key valid
+   - Cek webhook URLs configuration
+
+4. **Build Errors**
+   - Clear cache: `bun run clean`
+   - Reinstall dependencies: `rm -rf node_modules && bun install`
+
+### Logs
+
+Check logs untuk debugging:
+
+```bash
+# Development logs
+bun dev
+
+# Production logs
+bun start
+```
+
+## 📞 Support
+
+Jika Anda mengalami masalah atau membutuhkan bantuan:
+
+1. Check dokumentasi di atas
+2. Review error logs
+3. Check environment variables configuration
+4. Verify third-party service configurations (Sanity, Clerk, Midtrans)
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+**Happy Coding! 🚀**
+
+Dibuat dengan ❤️ menggunakan Next.js, Sanity, dan Midtrans.

@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  createCheckoutSession,
+  createMidtransPayment,
   Metadata,
-} from "@/actions/createCheckoutSession";
+} from "@/actions/createMidtransPayment";
 import Container from "@/components/Container";
 import EmptyCart from "@/components/EmptyCart";
 import NoAccess from "@/components/NoAccess";
@@ -32,6 +32,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
+
+// Midtrans callback interfaces
+interface MidtransResult {
+  transaction_id: string;
+  order_id: string;
+  payment_type: string;
+  transaction_status: string;
+  fraud_status: string;
+}
+
+declare global {
+  interface Window {
+    snap: {
+      pay: (token: string, options: {
+        onSuccess?: (result: MidtransResult) => void;
+        onPending?: (result: MidtransResult) => void;
+        onError?: (result: MidtransResult) => void;
+        onClose?: () => void;
+      }) => void;
+    };
+  }
+}
 
 const CartPage = () => {
   const {
@@ -47,6 +70,21 @@ const CartPage = () => {
   const { user } = useUser();
   const [addresses, setAddresses] = useState<Address[] | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const searchParams = useSearchParams();
+
+  // Handle error and status parameters from URL
+  useEffect(() => {
+    const error = searchParams.get("error");
+    const status = searchParams.get("status");
+    
+    if (error === "payment_failed") {
+      toast.error("Pembayaran gagal. Silakan coba lagi.");
+    } else if (error === "system_error") {
+      toast.error("Terjadi kesalahan sistem. Silakan coba lagi.");
+    } else if (status === "pending") {
+      toast.success("Pembayaran sedang diproses...");
+    }
+  }, [searchParams]);
 
   const fetchAddresses = async () => {
     setLoading(true);
@@ -89,12 +127,30 @@ const CartPage = () => {
         clerkUserId: user?.id,
         address: selectedAddress,
       };
-      const checkoutUrl = await createCheckoutSession(groupedItems, metadata);
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
+      const result = await createMidtransPayment(groupedItems, metadata);
+      if (result?.token) {
+        // Use Midtrans Snap to open payment popup
+        window.snap.pay(result.token, {
+          onSuccess: function(result: MidtransResult) {
+            console.log('Payment success:', result);
+            window.location.href = `/success?orderNumber=${metadata.orderNumber}&transaction_id=${result.transaction_id}`;
+          },
+          onPending: function(result: MidtransResult) {
+            console.log('Payment pending:', result);
+            toast.success('Payment is being processed...');
+          },
+          onError: function(result: MidtransResult) {
+            console.log('Payment error:', result);
+            toast.error('Payment failed. Please try again.');
+          },
+          onClose: function() {
+            console.log('Payment popup closed');
+          }
+        });
       }
     } catch (error) {
-      console.error("Error creating checkout session:", error);
+      console.error("Error creating Midtrans payment:", error);
+      toast.error("Failed to create payment. Please try again.");
     } finally {
       setLoading(false);
     }
