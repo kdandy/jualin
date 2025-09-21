@@ -125,23 +125,23 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Categories</h1>
           <p className="text-muted-foreground">
             Manage your product categories
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="w-full sm:w-auto">
               <Plus className="mr-2 h-4 w-4" />
               Add Category
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] mx-4">
             <DialogHeader>
               <DialogTitle>Create New Category</DialogTitle>
               <DialogDescription>
@@ -149,44 +149,36 @@ export default function CategoriesPage() {
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="title" className="text-right">
-                  Title
-                </Label>
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="col-span-3"
+                  placeholder="Enter category title"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="col-span-3"
+                  placeholder="Enter category description"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="range" className="text-right">
-                  Range
-                </Label>
+              <div className="space-y-2">
+                <Label htmlFor="range">Range</Label>
                 <Input
                   id="range"
                   type="number"
                   value={formData.range}
                   onChange={(e) => setFormData({ ...formData, range: parseInt(e.target.value) || 0 })}
-                  className="col-span-3"
+                  placeholder="Enter range value"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="featured" className="text-right">
-                  Featured
-                </Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="featured">Featured Category</Label>
                 <Switch
                   id="featured"
                   checked={formData.featured}
@@ -204,7 +196,7 @@ export default function CategoriesPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Categories</CardTitle>
@@ -251,13 +243,13 @@ export default function CategoriesPage() {
       {/* Search and Filters */}
       <Card>
         <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <Search className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center space-x-2 w-full">
+            <Search className="h-4 w-4 text-muted-foreground flex-shrink-0" />
             <Input
               placeholder="Search categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-sm"
+              className="flex-1"
             />
           </div>
         </CardContent>
@@ -268,81 +260,83 @@ export default function CategoriesPage() {
         <CardHeader>
           <CardTitle>Categories List</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Image</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Products</TableHead>
-                <TableHead>Range</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCategories.map((category) => (
-                <TableRow key={category._id}>
-                  <TableCell>
-                    {category.image ? (
-                      <Image
-                        src={urlFor(category.image).width(60).height(60).url()}
-                        alt={category.title}
-                        width={60}
-                        height={60}
-                        className="rounded-md object-cover"
-                      />
-                    ) : (
-                      <div className="w-[60px] h-[60px] bg-gray-200 rounded-md flex items-center justify-center">
-                        <span className="text-xs text-gray-500">No Image</span>
-                      </div>
-                    )}
-                  </TableCell>
-                  <TableCell className="font-medium">{category.title}</TableCell>
-                  <TableCell className="max-w-xs truncate">
-                    {category.description || "No description"}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{category.productCount}</Badge>
-                  </TableCell>
-                  <TableCell>{category.range || "-"}</TableCell>
-                  <TableCell>
-                    {category.featured ? (
-                      <Badge>Featured</Badge>
-                    ) : (
-                      <Badge variant="outline">Regular</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => window.open(`/category/${category.slug.current}`, '_blank')}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openEditDialog(category)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeleteCategory(category._id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[80px]">Image</TableHead>
+                  <TableHead className="min-w-[150px]">Title</TableHead>
+                  <TableHead className="min-w-[200px]">Description</TableHead>
+                  <TableHead className="min-w-[100px]">Products</TableHead>
+                  <TableHead className="min-w-[80px]">Range</TableHead>
+                  <TableHead className="min-w-[100px]">Status</TableHead>
+                  <TableHead className="min-w-[120px]">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredCategories.map((category) => (
+                  <TableRow key={category._id}>
+                    <TableCell>
+                      {category.image ? (
+                        <Image
+                          src={urlFor(category.image).width(60).height(60).url()}
+                          alt={category.title}
+                          width={60}
+                          height={60}
+                          className="rounded-md object-cover flex-shrink-0"
+                        />
+                      ) : (
+                        <div className="w-[60px] h-[60px] bg-gray-200 rounded-md flex items-center justify-center flex-shrink-0">
+                          <span className="text-xs text-gray-500">No Image</span>
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell className="font-medium">{category.title}</TableCell>
+                    <TableCell className="max-w-xs truncate">
+                      {category.description || "No description"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">{category.productCount}</Badge>
+                    </TableCell>
+                    <TableCell>{category.range || "-"}</TableCell>
+                    <TableCell>
+                      {category.featured ? (
+                        <Badge>Featured</Badge>
+                      ) : (
+                        <Badge variant="outline">Regular</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => window.open(`/category/${category.slug.current}`, '_blank')}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openEditDialog(category)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteCategory(category._id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           {filteredCategories.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               No categories found.

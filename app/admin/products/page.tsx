@@ -110,16 +110,16 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Products</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Products</h1>
           <p className="text-muted-foreground">
-            Manage your product catalog and inventory
+            Manage your product inventory and details
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
           <Link href="/admin/products/new">
             <Plus className="mr-2 h-4 w-4" />
             Add Product
@@ -128,7 +128,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Products</CardTitle>
@@ -146,7 +146,7 @@ export default function ProductsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {products.filter(p => p.status === 'active').length}
+              {products.filter(product => product.stock > 0).length}
             </div>
           </CardContent>
         </Card>
@@ -158,7 +158,7 @@ export default function ProductsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {products.filter(p => p.stock === 0).length}
+              {products.filter(product => product.stock === 0).length}
             </div>
           </CardContent>
         </Card>
@@ -170,7 +170,7 @@ export default function ProductsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {products.filter(p => p.stock > 0 && p.stock < 10).length}
+              {products.filter(product => product.stock > 0 && product.stock <= 10).length}
             </div>
           </CardContent>
         </Card>
@@ -185,14 +185,14 @@ export default function ProductsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
+            <div className="relative flex-1 w-full sm:max-w-sm">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 flex-shrink-0" />
               <Input
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 flex-1"
               />
             </div>
             <Button variant="outline">
@@ -202,17 +202,17 @@ export default function ProductsPage() {
           </div>
 
           {/* Products Table */}
-          <div className="rounded-md border">
+          <div className="rounded-md border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Brand</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="min-w-[250px]">Product</TableHead>
+                  <TableHead className="min-w-[120px]">Category</TableHead>
+                  <TableHead className="min-w-[100px]">Brand</TableHead>
+                  <TableHead className="min-w-[100px]">Price</TableHead>
+                  <TableHead className="min-w-[80px]">Stock</TableHead>
+                  <TableHead className="min-w-[100px]">Status</TableHead>
+                  <TableHead className="text-right min-w-[100px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -220,7 +220,7 @@ export default function ProductsPage() {
                   <TableRow key={product._id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <div className="relative h-12 w-12 rounded-md overflow-hidden bg-muted">
+                        <div className="relative h-12 w-12 rounded-md overflow-hidden bg-muted flex-shrink-0">
                           <Image
                             src={product.images?.[0] ? urlFor(product.images[0]).width(80).height(80).url() : '/api/placeholder/80/80'}
                             alt={product.name}
@@ -228,18 +228,32 @@ export default function ProductsPage() {
                             className="object-cover"
                           />
                         </div>
-                        <div>
-                          <div className="font-medium">{product.name}</div>
-                          <div className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <div className="font-medium truncate">{product.name}</div>
+                          <div className="text-sm text-muted-foreground truncate">
                             {product.slug?.current || ''}
                           </div>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{product.categories?.[0]?.title || 'No Category'}</TableCell>
-                    <TableCell>{product.brand?.title || 'No Brand'}</TableCell>
-                    <TableCell>Rp {product.price?.toLocaleString('id-ID')}</TableCell>
-                    <TableCell>{product.stock}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        {product.categories?.[0]?.title || 'No Category'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium truncate">
+                        {product.brand?.title || 'No Brand'}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium">
+                        Rp {product.price?.toLocaleString('id-ID')}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium">{product.stock}</div>
+                    </TableCell>
                     <TableCell>
                       {getStatusBadge(product.status, product.stock)}
                     </TableCell>

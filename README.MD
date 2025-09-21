@@ -85,32 +85,6 @@ NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=your_midtrans_client_key
 MIDTRANS_IS_PRODUCTION=false
 ```
 
-### 4. Setup Sanity CMS
-
-#### 4.1 Install Sanity CLI
-
-```bash
-bun add -g @sanity/cli
-```
-
-#### 4.2 Login ke Sanity
-
-```bash
-sanity login
-```
-
-#### 4.3 Inisialisasi Sanity Project
-
-```bash
-sanity init
-```
-
-#### 4.4 Deploy Sanity Schema
-
-```bash
-sanity deploy
-```
-
 ### 5. Setup Clerk Authentication
 
 1. Buat akun di [Clerk.com](https://clerk.com)
@@ -153,7 +127,7 @@ bun run build
 bun start
 ```
 
-## 👨‍💼 Login Admin
+##  Login Admin
 
 ### Akses Admin Dashboard
 
@@ -167,14 +141,14 @@ bun start
 
 ### Fitur Admin Dashboard
 
-- **📊 Dashboard**: Overview statistik dan analytics
-- **🛍️ Products**: Manajemen produk (tambah, edit, hapus)
-- **📦 Orders**: Kelola pesanan dan status pembayaran
-- **🏷️ Categories**: Manajemen kategori produk
-- **🏢 Brands**: Manajemen brand/merek
-- **👥 Authors**: Manajemen penulis
-- **📍 Addresses**: Manajemen alamat pengiriman
-- **⚙️ Settings**: Konfigurasi sistem
+- **Dashboard**: Overview statistik dan analytics
+- **Products**: Manajemen produk (tambah, edit, hapus)
+- **Orders**: Kelola pesanan dan status pembayaran
+- **Categories**: Manajemen kategori produk
+- **Brands**: Manajemen brand/merek
+- **Authors**: Manajemen penulis
+- **Addresses**: Manajemen alamat pengiriman
+- **Settings**: Konfigurasi sistem
 
 ## 📁 Struktur Project
 
@@ -223,15 +197,6 @@ Jika Anda memiliki data seed:
 sanity dataset import seed/data.ndjson production
 ```
 
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. Push code ke GitHub
-2. Connect repository di Vercel
-3. Set environment variables di Vercel dashboard
-4. Deploy
-
 ### Environment Variables untuk Production
 
 Pastikan semua environment variables sudah diset dengan nilai production:
@@ -256,6 +221,7 @@ Pastikan semua environment variables sudah diset dengan nilai production:
 1. Login ke admin dashboard
 2. Test CRUD operations untuk produk
 3. Verifikasi order management
+4. Test blog management
 
 ## 🐛 Troubleshooting
 
@@ -289,21 +255,8 @@ bun dev
 bun start
 ```
 
-## 📞 Support
-
-Jika Anda mengalami masalah atau membutuhkan bantuan:
-
-1. Check dokumentasi di atas
-2. Review error logs
-3. Check environment variables configuration
-4. Verify third-party service configurations (Sanity, Clerk, Midtrans)
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
 ---
-
-**Happy Coding! 🚀**
-
-Dibuat dengan ❤️ menggunakan Next.js, Sanity, dan Midtrans.

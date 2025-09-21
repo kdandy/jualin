@@ -166,11 +166,11 @@ export default function OrdersPage() {
   const deliveredOrders = orders.filter(order => order.status === 'delivered').length;
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Orders</h1>
           <p className="text-muted-foreground">
             Manage customer orders and track deliveries
           </p>
@@ -178,7 +178,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
@@ -219,19 +219,19 @@ export default function OrdersPage() {
       {/* Search and Filters */}
       <Card>
         <CardContent className="pt-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex items-center space-x-2 flex-1">
-              <Search className="h-4 w-4 text-muted-foreground" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center space-x-2 w-full sm:max-w-sm">
+              <Search className="h-4 w-4 text-muted-foreground flex-shrink-0" />
               <Input
-                placeholder="Search orders by number, customer name, or email..."
+                placeholder="Search orders..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm"
+                className="flex-1"
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
@@ -251,96 +251,98 @@ export default function OrdersPage() {
         <CardHeader>
           <CardTitle>Orders List</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order Number</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Products</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOrders.map((order) => (
-                <TableRow key={order._id}>
-                  <TableCell className="font-medium">{order.orderNumber}</TableCell>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{order.customerName}</div>
-                      <div className="text-sm text-muted-foreground">{order.email}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary">{order.products.length} items</Badge>
-                      <div className="flex -space-x-2">
-                        {order.products.slice(0, 3).map((item, index) => (
-                          <div key={index} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden">
-                            {item.product.image ? (
-                              <Image
-                                src={urlFor(item.product.image).width(32).height(32).url()}
-                                alt={item.product.name}
-                                width={32}
-                                height={32}
-                                className="object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                <Package className="w-4 h-4 text-gray-400" />
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                        {order.products.length > 3 && (
-                          <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-xs">
-                            +{order.products.length - 3}
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[150px]">Order Number</TableHead>
+                  <TableHead className="min-w-[200px]">Customer</TableHead>
+                  <TableHead className="min-w-[180px]">Products</TableHead>
+                  <TableHead className="min-w-[120px]">Total</TableHead>
+                  <TableHead className="min-w-[120px]">Status</TableHead>
+                  <TableHead className="min-w-[120px]">Date</TableHead>
+                  <TableHead className="min-w-[120px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredOrders.map((order) => (
+                  <TableRow key={order._id}>
+                    <TableCell className="font-medium">{order.orderNumber}</TableCell>
+                    <TableCell>
+                      <div className="min-w-0">
+                        <div className="font-medium truncate">{order.customerName}</div>
+                        <div className="text-sm text-muted-foreground truncate">{order.email}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="secondary">{order.products.length} items</Badge>
+                        <div className="flex -space-x-2">
+                          {order.products.slice(0, 3).map((item, index) => (
+                            <div key={index} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden flex-shrink-0">
+                              {item.product.image ? (
+                                <Image
+                                  src={urlFor(item.product.image).width(32).height(32).url()}
+                                  alt={item.product.name}
+                                  width={32}
+                                  height={32}
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                  <Package className="w-4 h-4 text-gray-400" />
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                          {order.products.length > 3 && (
+                            <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-xs flex-shrink-0">
+                              +{order.products.length - 3}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{formatCurrency(order.totalPrice, order.currency)}</div>
+                        {order.amountDiscount > 0 && (
+                          <div className="text-sm text-green-600">
+                            -{formatCurrency(order.amountDiscount, order.currency)} discount
                           </div>
                         )}
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{formatCurrency(order.totalPrice, order.currency)}</div>
-                      {order.amountDiscount > 0 && (
-                        <div className="text-sm text-green-600">
-                          -{formatCurrency(order.amountDiscount, order.currency)} discount
-                        </div>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={getStatusBadge(order.status).color}>
-                      {getStatusBadge(order.status).label}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{formatDate(order.orderDate)}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openDetailDialog(order)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openEditDialog(order)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={getStatusBadge(order.status).color}>
+                        {getStatusBadge(order.status).label}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{formatDate(order.orderDate)}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openDetailDialog(order)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openEditDialog(order)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           {filteredOrders.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               No orders found.
