@@ -8,13 +8,11 @@ import { AdminUser } from '@/lib/admin-auth';
 import { 
   Package, 
   ShoppingCart, 
-  FileText,
   Tag,
   Shield,
   X,
   User,
   MapPin,
-  Folder,
   Settings,
   LogOut,
   ChevronDown
@@ -47,16 +45,6 @@ const menuItems = [
     title: 'Brand',
     href: '/admin/brands',
     icon: Shield,
-  },
-  {
-    title: 'Blog',
-    href: '/admin/blogs',
-    icon: FileText,
-  },
-  {
-    title: 'Blog Category',
-    href: '/admin/blog-categories',
-    icon: Folder,
   },
   {
     title: 'Author',
@@ -149,9 +137,11 @@ export default function AdminSidebar({ admin, isOpen = false, onClose, isDesktop
           >
             <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-500">
               {admin.imageUrl ? (
-                <img 
+                <Image 
                   src={admin.imageUrl} 
                   alt={admin.name}
+                  width={40}
+                  height={40}
                   className="w-full h-full object-cover"
                 />
               ) : (

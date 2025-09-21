@@ -129,39 +129,7 @@ const ALL_BRANDS_ADMIN_QUERY = defineQuery(`*[_type == "brand"] | order(title as
   _updatedAt
 }`);
 
-// Query untuk mendapatkan semua blogs
-const ALL_BLOGS_ADMIN_QUERY = defineQuery(`*[_type == "blog"] | order(publishedAt desc) {
-  _id,
-  title,
-  slug,
-  author->{
-    _id,
-    name
-  },
-  mainImage{
-    asset->{
-      url
-    }
-  },
-  blogcategories[]->{
-    _id,
-    title
-  },
-  publishedAt,
-  isLatest,
-  _createdAt,
-  _updatedAt
-}`);
 
-// Query untuk mendapatkan semua blog categories
-const ALL_BLOG_CATEGORIES_ADMIN_QUERY = defineQuery(`*[_type == "blogcategory"] | order(_createdAt desc) {
-  _id,
-  title,
-  slug,
-  description,
-  _createdAt,
-  _updatedAt
-}`);
 
 // Authors Query
 const ALL_AUTHORS_ADMIN_QUERY = defineQuery(`*[_type == "author"] | order(_createdAt desc) {
@@ -248,8 +216,6 @@ export {
   ALL_CATEGORIES_QUERY,
   ALL_ORDERS_ADMIN_QUERY,
   ALL_BRANDS_ADMIN_QUERY,
-  ALL_BLOGS_ADMIN_QUERY,
-  ALL_BLOG_CATEGORIES_ADMIN_QUERY,
   ALL_AUTHORS_ADMIN_QUERY,
   ALL_ADDRESSES_ADMIN_QUERY,
   ALL_ADMINS_QUERY,

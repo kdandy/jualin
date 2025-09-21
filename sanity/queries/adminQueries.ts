@@ -7,8 +7,6 @@ import {
   ALL_CATEGORIES_QUERY,
   ALL_ORDERS_ADMIN_QUERY,
   ALL_BRANDS_ADMIN_QUERY,
-  ALL_BLOGS_ADMIN_QUERY,
-  ALL_BLOG_CATEGORIES_ADMIN_QUERY,
   ALL_AUTHORS_ADMIN_QUERY,
   ALL_ADDRESSES_ADMIN_QUERY,
 } from "./admin";
@@ -118,33 +116,7 @@ export const getAllBrands = async (start = 0, end = 50) => {
   }
 };
 
-// Fungsi untuk mendapatkan semua blogs dengan pagination
-export const getAllBlogs = async (start = 0, end = 50) => {
-  try {
-    const { data } = await sanityFetch({ 
-      query: ALL_BLOGS_ADMIN_QUERY,
-      params: { start, end }
-    });
-    return data || [];
-  } catch (error) {
-    console.error("Error fetching all blogs:", error);
-    return [];
-  }
-};
 
-// Fungsi untuk mendapatkan semua blog categories dengan pagination
-export const getAllBlogCategories = async (start = 0, end = 50) => {
-  try {
-    const { data } = await sanityFetch({ 
-      query: ALL_BLOG_CATEGORIES_ADMIN_QUERY,
-      params: { start, end }
-    });
-    return data || [];
-  } catch (error) {
-    console.error("Error fetching all blog categories:", error);
-    return [];
-  }
-};
 
 // Fungsi untuk mendapatkan semua authors dengan pagination
 export const getAllAuthors = async (start = 0, end = 50) => {

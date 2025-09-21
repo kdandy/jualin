@@ -9,7 +9,6 @@ Jualin adalah platform e-commerce modern yang dibangun dengan Next.js 15, TypeSc
 - **👤 User Management**: Autentikasi dengan Clerk
 - **📱 Responsive Design**: UI modern dengan Tailwind CSS
 - **🎨 Admin Dashboard**: Panel admin untuk mengelola produk, order, dan konten
-- **📝 Blog System**: Sistem blog terintegrasi
 - **🏷️ Brand & Category**: Manajemen brand dan kategori produk
 - **📍 Address Management**: Sistem alamat pengiriman
 
@@ -173,8 +172,7 @@ bun start
 - **📦 Orders**: Kelola pesanan dan status pembayaran
 - **🏷️ Categories**: Manajemen kategori produk
 - **🏢 Brands**: Manajemen brand/merek
-- **📝 Blogs**: Sistem manajemen konten blog
-- **👥 Authors**: Manajemen penulis blog
+- **👥 Authors**: Manajemen penulis
 - **📍 Addresses**: Manajemen alamat pengiriman
 - **⚙️ Settings**: Konfigurasi sistem
 
@@ -258,7 +256,6 @@ Pastikan semua environment variables sudah diset dengan nilai production:
 1. Login ke admin dashboard
 2. Test CRUD operations untuk produk
 3. Verifikasi order management
-4. Test blog management
 
 ## 🐛 Troubleshooting
 
